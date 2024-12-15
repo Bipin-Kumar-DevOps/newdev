@@ -25,6 +25,3 @@ variable "bastion_host" {
 variable "sqlserver" {
   type = map(any)
 }
-variable "linuxwebapp" {
-  type = map(any)
-}
