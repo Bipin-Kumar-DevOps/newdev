@@ -2,3 +2,13 @@ trigger:
   branches:
     include:
     - main
+pool: bipinpool
+
+stages:
+- stage: TerraformInitPlan
+  displayName: Terraform Init Plan
+  jobs:
+  - job: TerraformInitPlan
+    steps:
+    
+    
