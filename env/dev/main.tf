@@ -30,7 +30,7 @@ module "linux_vms" {
 module "keyvault" {
   source     = "../../module/keyvault"
   keyvault   = var.keyvault
-  depends_on = [module.rgs]
+  depends_on = [module.subnets]
 }
 
 module "pip" {
