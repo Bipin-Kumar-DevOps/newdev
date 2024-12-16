@@ -30,7 +30,7 @@ resource "azurerm_mssql_database" "sqldb" {
   sku_name       = "S0"
   zone_redundant = false
   enclave_type   = "VBS"
-
+depends_on = [ azurerm_mssql_server.sqlserver ]
 
 #   identity {
 #     type         = "UserAssigned"
