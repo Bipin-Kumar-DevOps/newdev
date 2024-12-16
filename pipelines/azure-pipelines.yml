@@ -51,6 +51,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
         backendServiceArm: 'infra-pipeline-azure'
         backendAzureRmResourceGroupName: 'dev-rg1'
         backendAzureRmStorageAccountName: 'devbkstg01'
