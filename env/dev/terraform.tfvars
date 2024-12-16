@@ -85,13 +85,13 @@ bastion_host = {
 
 sqlserver = {
   server1 = {
-    server_name                  = "bipinserver0123"
+    server_name                  = "bipinserver4321"
     resource_group_name          = "dev-rg2"
-    location                     = "west europe"
+    location                     = "central india"
     administrator_login          = "bipink1234"
     administrator_login_password = "rjio@123456789"
-    sqldb_name                   = "bipinkdb01"
-    sqlserver_name               = "bipinserver0123"
-
+    sqldb_name                   = "bipinkdb2345"
+    sqlserver_name               = "bipinserver4321"
   }
 }
+
