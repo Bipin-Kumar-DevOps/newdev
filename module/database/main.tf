@@ -31,9 +31,6 @@ resource "azurerm_mssql_database" "sqldb" {
   zone_redundant = false
   enclave_type   = "VBS"
 
-  tags = {
-    environment = "dev"
-  }
 
 #   identity {
 #     type         = "UserAssigned"
