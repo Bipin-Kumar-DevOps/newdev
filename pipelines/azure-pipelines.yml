@@ -56,4 +56,9 @@ stages:
         backendAzureRmStorageAccountName: 'devbkstg01'
         backendAzureRmContainerName: 'dev'
         backendAzureRmKey: 'dev.terraform.tfstate'
-    
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+        environmentServiceNameAzureRM: 'infra-pipeline-azure'
