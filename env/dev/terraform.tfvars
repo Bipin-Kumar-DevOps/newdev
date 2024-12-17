@@ -90,7 +90,7 @@ sqlserver = {
     location                     = "west europe"
     administrator_login          = "bipink1234"
     administrator_login_password = "rjio@123456789"
-    sqldb_name                   = "bipinkdb2345"
+    sqldb_name                   = "bipinkdbexample"
     sqlserver_name               = "bipinserver4321"
   }
 }
