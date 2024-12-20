@@ -40,6 +40,7 @@ nic = {
     resource_group_name  = "dev-rg2"
     virtual_network_name = "dev-vnet01"
     subnet_name          = "dev-subnet1"
+    pip_name             = "devpip-1"
   }
 }
 
@@ -71,17 +72,17 @@ pip = {
   }
 }
 
-bastion_host = {
-  bastion1 = {
-    bastion_name         = "devbastion123"
-    location             = "west europe"
-    resource_group_name  = "dev-rg2"
-    bastion_subnet_name  = "AzureBastionSubnet"
-    virtual_network_name = "dev-vnet01"
-    pip_name             = "devpip-1"
+# bastion_host = {
+#   bastion1 = {
+#     bastion_name         = "devbastion123"
+#     location             = "west europe"
+#     resource_group_name  = "dev-rg2"
+#     bastion_subnet_name  = "AzureBastionSubnet"
+#     virtual_network_name = "dev-vnet01"
+#     pip_name             = "devpip-1"
 
-  }
-}
+#   }
+# }
 
 sqlserver = {
   server1 = {

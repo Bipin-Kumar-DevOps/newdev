@@ -39,11 +39,11 @@ module "pip" {
   depends_on = [module.nic]
 }
 
-module "bastion" {
-  source       = "../../module/bastion"
-  bastion_host = var.bastion_host
-  depends_on   = [module.pip]
-}
+# module "bastion" {
+#   source       = "../../module/bastion"
+#   bastion_host = var.bastion_host
+#   depends_on   = [module.pip]
+# }
 
 module "sqldb" {
   source     = "../../module/database"

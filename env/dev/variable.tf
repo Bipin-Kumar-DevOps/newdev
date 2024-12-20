@@ -19,9 +19,9 @@ variable "keyvault" {
 variable "pip" {
   type = map(any)
 }
-variable "bastion_host" {
-  type = map(any)
-}
+# variable "bastion_host" {
+#   type = map(any)
+# }
 variable "sqlserver" {
   type = map(any)
 }
