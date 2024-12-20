@@ -24,7 +24,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
         backendServiceArm: 'infra-pipeline-azure'
-        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmResourceGroupName: "MC_dev-rg1_aks-dev-cluster_eastus"
         backendAzureRmStorageAccountName: 'devbkstg01'
         backendAzureRmContainerName: 'dev'
         backendAzureRmKey: 'dev.terraform.tfstate'
@@ -53,7 +53,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
         backendServiceArm: 'infra-pipeline-azure'
-        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmResourceGroupName: "MC_dev-rg1_aks-dev-cluster_eastus"
         backendAzureRmStorageAccountName: 'devbkstg01'
         backendAzureRmContainerName: 'dev'
         backendAzureRmKey: 'dev.terraform.tfstate'
