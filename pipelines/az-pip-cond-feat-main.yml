@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - '*'  # Trigger for all branches
+      - 'feature/*'  # Trigger pipeline for feature branches only
 
 pr:
   branches:
@@ -11,10 +11,10 @@ pr:
 pool: bipinpool
 
 stages:
-# Stage 1: Terraform Plan (Runs in all branches)
+# Stage 1: Terraform Plan (Runs on feature branches)
 - stage: TerraformPlan
   displayName: "Terraform Init and Plan"
-  condition: always()  # This ensures the stage runs in all branches
+  condition: always()  # Ensures this stage runs in feature branches
   jobs:
   - job: TerraformPlan
     steps:
@@ -39,11 +39,11 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
         environmentServiceNameAzureRM: 'new-sc-bk'
 
-# Stage 2: Terraform Apply (Restricted to main branch only)
+# Stage 2: Terraform Apply (Runs only on main branch after PR is merged)
 - stage: TerraformApply
   displayName: "Terraform Apply"
   dependsOn: TerraformPlan
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))  # Runs only on main branch after a successful plan
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))  # Runs only on main after PR is merged
   jobs:
   - job: ManualValidation
     displayName: "Manual Validation"
@@ -51,11 +51,11 @@ stages:
     steps:
     - task: ManualValidation@1
       inputs:
-        notifyUsers: 'approver@company.com'  # Replace with the actual approvers
+        notifyUsers: 'approver@company.com'  # Replace with actual approvers
 
   - job: TerraformApply
     dependsOn: ManualValidation
-    condition: succeeded()  # Runs only after successful manual validation
+    condition: succeeded()  # Runs only after manual validation
     steps:
     - task: TerraformTaskV4@4
       inputs:
