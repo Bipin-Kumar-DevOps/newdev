@@ -7,6 +7,7 @@ variable "vnets" {
 variable "subnets" {
   type = map(any)
 }
+
 variable "nic" {
   type = map(any)
 }
