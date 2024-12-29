@@ -3,6 +3,7 @@ module "rgs" {
   rgs    = var.rgs
 }
 
+#Vnets code
 module "vnets" {
   source     = "../../module/vnet"
   vnets      = var.vnets
@@ -14,6 +15,7 @@ module "subnets" {
   subnets    = var.subnets
   depends_on = [module.vnets]
 }
+
 
 module "nic" {
   source     = "../../module/nic"
