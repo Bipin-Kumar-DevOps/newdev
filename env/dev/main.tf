@@ -3,6 +3,7 @@ module "rgs" {
   rgs    = var.rgs
 }
 
+#Vnets code
 module "vnets" {
   source     = "../../module/vnet"
   vnets      = var.vnets
