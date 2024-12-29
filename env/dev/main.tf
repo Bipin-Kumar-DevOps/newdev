@@ -10,6 +10,7 @@ module "vnets" {
   depends_on = [module.rgs]
 }
 
+
 module "subnets" {
   source     = "../../module/subnet"
   subnets    = var.subnets
