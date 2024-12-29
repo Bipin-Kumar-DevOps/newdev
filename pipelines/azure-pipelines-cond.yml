@@ -33,6 +33,7 @@ stages:
         environmentServiceNameAzureRM: 'new-sc-bk'
 - stage: ManualvalidationTerraformapply
   dependsOn: TerraformInitPlan
+  condition: succeeded()
   jobs:
   - job: manualvalidation
     pool: server
@@ -43,6 +44,7 @@ stages:
         notifyUsers: 'adfs@afd'
   - job: terraformapply
     dependsOn: manualvalidation
+    condition: succeeded()
     steps:
     - task: TerraformTaskV4@4
       inputs:
