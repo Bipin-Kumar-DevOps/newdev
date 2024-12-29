@@ -7,7 +7,6 @@ pr:
   branches:
     include:
       - '*'  # Runs validation for all pull requests
-
 pool: bipinpool
 
 stages:
