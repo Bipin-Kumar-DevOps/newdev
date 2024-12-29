@@ -4,10 +4,10 @@ trigger:
       - 'feature/*'  # Trigger pipeline for feature branches
       - 'main'       # Trigger pipeline for main branch after PR merge
 
-pr:
-  branches:
-    include:
-      - '*'  # Validate all pull requests
+# pr:
+#   branches:
+#     include:
+#       - '*'  # Validate all pull requests
 
 pool: bipinpool
 

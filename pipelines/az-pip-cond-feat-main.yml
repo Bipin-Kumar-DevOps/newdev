@@ -1,13 +1,13 @@
-trigger:
-  branches:
-    include:
-      - 'feature/*'  # Trigger pipeline for feature branches only
+# trigger:
+#   branches:
+#     include:
+#       - 'feature/*'  # Trigger pipeline for feature branches only
 
-pr:
-  branches:
-    include:
-      - '*'  # Runs validation for all pull requests
-pool: bipinpool
+# pr:
+#   branches:
+#     include:
+#       - '*'  # Runs validation for all pull requests
+# pool: bipinpool
 
 stages:
 # Stage 1: Terraform Plan (Runs on feature branches)

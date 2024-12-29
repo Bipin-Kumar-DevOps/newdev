@@ -16,6 +16,7 @@ module "subnets" {
   depends_on = [module.vnets]
 }
 
+
 module "nic" {
   source     = "../../module/nic"
   nic        = var.nic
