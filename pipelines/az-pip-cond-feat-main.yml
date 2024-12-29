@@ -13,7 +13,6 @@ stages:
 # Stage 1: Terraform Plan (Runs on feature branches)
 - stage: TerraformPlan
   displayName: "Terraform Init and Plan"
-  condition: always()  # Ensures this stage runs in feature branches
   jobs:
   - job: TerraformPlan
     steps:
