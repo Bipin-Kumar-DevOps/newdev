@@ -22,8 +22,8 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
         backendServiceArm: 'new-sc-bk'
         backendAzureRmResourceGroupName: 'dev-rg1'
-        backendAzureRmStorageAccountName: 'devbkstg01'
-        backendAzureRmContainerName: 'dev'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
         backendAzureRmKey: 'bk1.terraform.tfstate'
     - task: TerraformTaskV4@4
       inputs:
@@ -53,12 +53,12 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
         backendServiceArm: 'infra-pipeline-azure'
         backendAzureRmResourceGroupName: 'dev-rg1'
-        backendAzureRmStorageAccountName: 'devbkstg01'
-        backendAzureRmContainerName: 'dev'
-        backendAzureRmKey: 'dev.terraform.tfstate'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
+        backendAzureRmKey: 'bk1.terraform.tfstate'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
-        environmentServiceNameAzureRM: 'infra-pipeline-azure'
+        environmentServiceNameAzureRM: 'new-sc-bk'
