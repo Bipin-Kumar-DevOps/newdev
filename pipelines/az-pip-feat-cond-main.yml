@@ -49,10 +49,11 @@ stages:
   jobs:
   - job: ManualValidation
     displayName: "Manual Validation"
+    pool: server
     steps:
     - task: ManualValidation@1
       inputs:
-        notifyUsers: 'approver@company.com'  # Replace with actual approvers
+        notifyUsers: 'approdds@ad'  # Replace with actual approvers
 
   - job: TerraformApply
     dependsOn: ManualValidation
