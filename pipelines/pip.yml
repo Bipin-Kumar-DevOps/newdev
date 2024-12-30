@@ -20,10 +20,6 @@ stages:
   - job: TerraformPlan
     displayName: "Terraform Plan Job"
     steps:
-    - script: |
-        echo "Source Branch: $(Build.SourceBranch)"
-        echo "Branch Name: $(Build.SourceBranchName)"
-      displayName: "Debug Branch Variables"
     - task: tfsec@1
       inputs:
         version: 'v1.26.0'
@@ -52,16 +48,13 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
   jobs:
   - job: ManualValidation
-    displayName: "Manual Validation"
     pool: server
+    displayName: "Manual Validation"
     steps:
-    - script: |
-        echo "Source Branch: $(Build.SourceBranch)"
-        echo "Branch Name: $(Build.SourceBranchName)"
-      displayName: "Debug Branch Variables"
     - task: ManualValidation@1
       inputs:
-        notifyUsers: 'approdds@ad'
+        notifyUsers: 'approdds@ad'  # Replace with actual approvers
+        instructions: 'Please review the Terraform plan and approve to proceed.'
 
   - job: TerraformApply
     dependsOn: ManualValidation
