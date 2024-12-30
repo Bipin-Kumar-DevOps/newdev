@@ -1,25 +1,29 @@
 trigger:
   branches:
     include:
-      - 'feature/*'  # Trigger pipeline for feature branches
-      - 'main'       # Trigger pipeline for main branch after PR merge
+      - 'feature/*'
+      - 'main'
 
 pr:
   branches:
     include:
-      - 'main'  # Validate pull requests targeting the main branch
+      - 'main'
 
-pool: bipinpool #Agent name to run the pipeline that.
+pool: bipinpool
 
 stages:
-# Stage 1: Terraform Plan (Runs on feature branches)
+# Stage 1: Terraform Plan
 - stage: TerraformPlan
   displayName: "Terraform Init and Plan"
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')  # Run only on feature branches
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
   jobs:
   - job: TerraformPlan
     displayName: "Terraform Plan Job"
     steps:
+    - script: |
+        echo "Source Branch: $(Build.SourceBranch)"
+        echo "Branch Name: $(Build.SourceBranchName)"
+      displayName: "Debug Branch Variables"
     - task: tfsec@1
       inputs:
         version: 'v1.26.0'
@@ -41,24 +45,28 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
         environmentServiceNameAzureRM: 'new-sc-bk'
 
-# Stage 2: Terraform Apply (Runs only on main branch after PR merge)
+# Stage 2: Terraform Apply
 - stage: TerraformApply
   displayName: "Terraform Apply"
   dependsOn: TerraformPlan
-  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))  # Run only on main after PR merge
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
   jobs:
   - job: ManualValidation
     displayName: "Manual Validation"
     pool: server
     steps:
+    - script: |
+        echo "Source Branch: $(Build.SourceBranch)"
+        echo "Branch Name: $(Build.SourceBranchName)"
+      displayName: "Debug Branch Variables"
     - task: ManualValidation@1
       inputs:
-        notifyUsers: 'approdds@ad'  # Replace with actual approvers
+        notifyUsers: 'approdds@ad'
 
   - job: TerraformApply
     dependsOn: ManualValidation
     displayName: "Terraform Apply Job"
-    condition: succeeded()  # Runs only after manual validation
+    condition: succeeded()
     steps:
     - task: TerraformTaskV4@4
       inputs:
