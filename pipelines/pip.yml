@@ -53,8 +53,7 @@ stages:
     steps:
     - task: ManualValidation@1
       inputs:
-        notifyUsers: 'approdds@ad'  # Replace with actual approvers
-        instructions: 'Please review the Terraform plan and approve to proceed.'
+        notifyUsers: 'approdds@ad'
 
   - job: TerraformApply
     dependsOn: ManualValidation
