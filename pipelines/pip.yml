@@ -9,7 +9,7 @@ pr:
     include:
       - 'main'  # Validate pull requests targeting the main branch
 
-pool: bipinpool #Agent name to run the pipeline
+pool: bipinpool #Agent name to run the pipeline that.
 
 stages:
 # Stage 1: Terraform Plan (Runs on feature branches)
