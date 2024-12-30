@@ -1,64 +1,64 @@
-trigger: none
-  # branches:
-  #   include:
-  #     - main
+# trigger: none
+#   # branches:
+#   #   include:
+#   #     - main
 
-pool: bipinpool
+# pool: bipinpool
 
-stages:
-- stage: TerraformInitPlan
-  displayName: Terraform Init Plan
-  jobs:
-  - job: TerraformInitPlan
-    steps:
-    - task: tfsec@1
-      inputs:
-        version: 'v1.26.0'
-        dir: '$(System.DefaultWorkingDirectory)/env/dev/'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        backendServiceArm: 'new-sc-bk'
-        backendAzureRmResourceGroupName: 'dev-rg1'
-        backendAzureRmStorageAccountName: 'devstgacbk01'
-        backendAzureRmContainerName: 'devcont'
-        backendAzureRmKey: 'bk1.terraform.tfstate'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        environmentServiceNameAzureRM: 'new-sc-bk'
-- stage: ManualvalidationTerraformapply
-  dependsOn: TerraformInitPlan
-  condition: succeeded()
-  jobs:
-  - job: manualvalidation
-    pool: server
-    displayName: Manual validation
-    steps:
-    - task: ManualValidation@1
-      inputs:
-        notifyUsers: 'adfs@afd'
-  - job: terraformapply
-    dependsOn: manualvalidation
-    condition: succeeded()
-    steps:
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        backendServiceArm: 'infra-pipeline-azure'
-        backendAzureRmResourceGroupName: 'dev-rg1'
-        backendAzureRmStorageAccountName: 'devstgacbk01'
-        backendAzureRmContainerName: 'devcont'
-        backendAzureRmKey: 'bk1.terraform.tfstate'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
-        environmentServiceNameAzureRM: 'new-sc-bk'
+# stages:
+# - stage: TerraformInitPlan
+#   displayName: Terraform Init Plan
+#   jobs:
+#   - job: TerraformInitPlan
+#     steps:
+#     - task: tfsec@1
+#       inputs:
+#         version: 'v1.26.0'
+#         dir: '$(System.DefaultWorkingDirectory)/env/dev/'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+#         backendServiceArm: 'new-sc-bk'
+#         backendAzureRmResourceGroupName: 'dev-rg1'
+#         backendAzureRmStorageAccountName: 'devstgacbk01'
+#         backendAzureRmContainerName: 'devcont'
+#         backendAzureRmKey: 'bk1.terraform.tfstate'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'plan'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+#         environmentServiceNameAzureRM: 'new-sc-bk'
+# - stage: ManualvalidationTerraformapply
+#   dependsOn: TerraformInitPlan
+#   condition: succeeded()
+#   jobs:
+#   - job: manualvalidation
+#     pool: server
+#     displayName: Manual validation
+#     steps:
+#     - task: ManualValidation@1
+#       inputs:
+#         notifyUsers: 'adfs@afd'
+#   - job: terraformapply
+#     dependsOn: manualvalidation
+#     condition: succeeded()
+#     steps:
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+#         backendServiceArm: 'infra-pipeline-azure'
+#         backendAzureRmResourceGroupName: 'dev-rg1'
+#         backendAzureRmStorageAccountName: 'devstgacbk01'
+#         backendAzureRmContainerName: 'devcont'
+#         backendAzureRmKey: 'bk1.terraform.tfstate'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'apply'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+#         environmentServiceNameAzureRM: 'new-sc-bk'
