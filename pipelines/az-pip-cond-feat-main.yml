@@ -1,73 +1,73 @@
-# trigger:
-#   branches:
-#     include:
-#       - 'feature/*'  # Trigger pipeline for feature branches only
+# # trigger:
+# #   branches:
+# #     include:
+# #       - 'feature/*'  # Trigger pipeline for feature branches only
 
-# pr:
-#   branches:
-#     include:
-#       - '*'  # Runs validation for all pull requests
-# pool: bipinpool
+# # pr:
+# #   branches:
+# #     include:
+# #       - '*'  # Runs validation for all pull requests
+# # pool: bipinpool
 
-stages:
-# Stage 1: Terraform Plan (Runs on feature branches)
-- stage: TerraformPlan
-  displayName: "Terraform Init and Plan"
-  jobs:
-  - job: TerraformPlan
-    steps:
-    - task: tfsec@1
-      inputs:
-        version: 'v1.26.0'
-        dir: '$(System.DefaultWorkingDirectory)/env/dev/'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        backendServiceArm: 'new-sc-bk'
-        backendAzureRmResourceGroupName: 'dev-rg1'
-        backendAzureRmStorageAccountName: 'devstgacbk01'
-        backendAzureRmContainerName: 'devcont'
-        backendAzureRmKey: 'bk1.terraform.tfstate'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        environmentServiceNameAzureRM: 'new-sc-bk'
+# stages:
+# # Stage 1: Terraform Plan (Runs on feature branches)
+# - stage: TerraformPlan
+#   displayName: "Terraform Init and Plan"
+#   jobs:
+#   - job: TerraformPlan
+#     steps:
+#     - task: tfsec@1
+#       inputs:
+#         version: 'v1.26.0'
+#         dir: '$(System.DefaultWorkingDirectory)/env/dev/'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+#         backendServiceArm: 'new-sc-bk'
+#         backendAzureRmResourceGroupName: 'dev-rg1'
+#         backendAzureRmStorageAccountName: 'devstgacbk01'
+#         backendAzureRmContainerName: 'devcont'
+#         backendAzureRmKey: 'bk1.terraform.tfstate'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'plan'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+#         environmentServiceNameAzureRM: 'new-sc-bk'
 
-# Stage 2: Terraform Apply (Runs only on main branch after PR is merged)
-- stage: TerraformApply
-  displayName: "Terraform Apply"
-  dependsOn: TerraformPlan
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))  # Runs only on main after PR is merged
-  jobs:
-  - job: ManualValidation
-    displayName: "Manual Validation"
-    pool: server
-    steps:
-    - task: ManualValidation@1
-      inputs:
-        notifyUsers: 'approver@company.com'  # Replace with actual approvers
+# # Stage 2: Terraform Apply (Runs only on main branch after PR is merged)
+# - stage: TerraformApply
+#   displayName: "Terraform Apply"
+#   dependsOn: TerraformPlan
+#   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))  # Runs only on main after PR is merged
+#   jobs:
+#   - job: ManualValidation
+#     displayName: "Manual Validation"
+#     pool: server
+#     steps:
+#     - task: ManualValidation@1
+#       inputs:
+#         notifyUsers: 'approver@company.com'  # Replace with actual approvers
 
-  - job: TerraformApply
-    dependsOn: ManualValidation
-    condition: succeeded()  # Runs only after manual validation
-    steps:
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        backendServiceArm: 'infra-pipeline-azure'
-        backendAzureRmResourceGroupName: 'dev-rg1'
-        backendAzureRmStorageAccountName: 'devstgacbk01'
-        backendAzureRmContainerName: 'devcont'
-        backendAzureRmKey: 'bk1.terraform.tfstate'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
-        environmentServiceNameAzureRM: 'new-sc-bk'
+#   - job: TerraformApply
+#     dependsOn: ManualValidation
+#     condition: succeeded()  # Runs only after manual validation
+#     steps:
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+#         backendServiceArm: 'infra-pipeline-azure'
+#         backendAzureRmResourceGroupName: 'dev-rg1'
+#         backendAzureRmStorageAccountName: 'devstgacbk01'
+#         backendAzureRmContainerName: 'devcont'
+#         backendAzureRmKey: 'bk1.terraform.tfstate'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'apply'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+#         environmentServiceNameAzureRM: 'new-sc-bk'
