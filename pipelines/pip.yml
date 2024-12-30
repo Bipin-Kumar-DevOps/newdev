@@ -12,7 +12,7 @@ pr:
 pool: bipinpool
 
 stages:
-# Stage 1: Terraform Plan
+# Stage 1: Terraform Plan code
 - stage: TerraformPlan
   displayName: "Terraform Init and Plan"
   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
