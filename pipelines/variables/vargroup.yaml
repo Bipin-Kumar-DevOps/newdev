@@ -3,12 +3,7 @@ trigger: none
 pool: bipinpool
 
 variables:
-  workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
-  backendServiceArm: 'new-sc-bk'
-  backendAzureRmResourceGroupName: 'dev-rg1'
-  backendAzureRmStorageAccountName: 'devstgacbk01'
-  backendAzureRmContainerName: 'devcont'
-  backendAzureRmKey: 'dev.terraform.tfstate' 
+- group: my-backend-group
 
   
 
