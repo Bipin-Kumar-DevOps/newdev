@@ -1,0 +1,6 @@
+trigger: none
+  # branches:
+  #   include:
+  #   - main
+
+pool: bipinpool
