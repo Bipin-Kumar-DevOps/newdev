@@ -5,6 +5,14 @@ pool: bipinpool
 variables:
 - group: my-backend-group
 
+
+# These values are stored in the library with the variable group name my-backend-group and we can use the group keyword to access the values
+##  workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+  # backendServiceArm: 'new-sc-bk'
+  # backendAzureRmResourceGroupName: 'dev-rg1'
+  # backendAzureRmStorageAccountName: 'devstgacbk01'
+  # backendAzureRmContainerName: 'devcont'
+  # backendAzureRmKey: 'dev.terraform.tfstate' 
   
 
 stages:
