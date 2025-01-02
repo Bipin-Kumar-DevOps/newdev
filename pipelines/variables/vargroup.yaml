@@ -27,7 +27,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: $(workingDirectory)
+        workingDirectory: $(my-backend-group)
         backendServiceArm: $(backendServiceArm)
         backendAzureRmResourceGroupName: 'dev-rg1'
         backendAzureRmStorageAccountName: 'devstgacbk01'
