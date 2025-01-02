@@ -1,0 +1,69 @@
+trigger: none
+
+pool: bipinpool
+
+variables:
+  workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+  backendServiceArm: 'new-sc-bk'
+  backendAzureRmResourceGroupName: 'dev-rg1'
+  backendAzureRmStorageAccountName: 'devstgacbk01'
+  backendAzureRmContainerName: 'devcont'
+  backendAzureRmKey: 'dev.terraform.tfstate' 
+
+  
+
+stages:
+- stage: TerraformInitPlan
+  displayName: Terraform Init Plan
+  jobs:
+  - job: TerraformInitPlan
+    steps:
+    - task: tfsec@1
+      inputs:
+        version: 'v1.26.0'
+        dir: $(workingDirectory)
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: $(workingDirectory)
+        backendServiceArm: $(backendServiceArm)
+        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
+        backendAzureRmKey: 'dev.terraform.tfstate'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: $(workingDirectory)
+        environmentServiceNameAzureRM: 'new-sc-bk'
+- stage: ManualvalidationTerraformapply
+  dependsOn: TerraformInitPlan
+  jobs:
+  - job: manualvalidation
+    pool: server
+    displayName: Manual validation
+    steps:
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'adfs@afd'
+  - job: terraformapply
+    dependsOn: manualvalidation
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: $(workingDirectory)
+        backendServiceArm: 'new-sc-bk'
+        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
+        backendAzureRmKey: 'dev.terraform.tfstate'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: $(workingDirectory)
+        environmentServiceNameAzureRM: 'new-sc-bk'
