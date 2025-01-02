@@ -2,9 +2,14 @@ trigger: none
 
 pool: bipinpool
 
-Variables:
+variables:
   workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
-  backendServiceArm: 'infra-pipeline-azure'
+  backendServiceArm: 'new-sc-bk'
+  backendAzureRmResourceGroupName: 'dev-rg1'
+  backendAzureRmStorageAccountName: 'devstgacbk01'
+  backendAzureRmContainerName: 'devcont'
+  backendAzureRmKey: 'dev.terraform.tfstate' 
+
   
 
 stages:
@@ -16,13 +21,13 @@ stages:
     - task: tfsec@1
       inputs:
         version: 'v1.26.0'
-        dir: '$(System.DefaultWorkingDirectory)/env/dev/'
+        dir: $(workingDirectory)
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        backendServiceArm: 'new-sc-bk'
+        workingDirectory: $(workingDirectory)
+        backendServiceArm: $(backendServiceArm)
         backendAzureRmResourceGroupName: 'dev-rg1'
         backendAzureRmStorageAccountName: 'devstgacbk01'
         backendAzureRmContainerName: 'devcont'
