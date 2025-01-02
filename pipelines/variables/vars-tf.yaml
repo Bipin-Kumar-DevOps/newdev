@@ -1,0 +1,73 @@
+trigger: none
+
+pool: bipinpool
+
+Variables:
+  workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+  backendServiceArm: 'infra-pipeline-azure'
+  
+
+stages:
+- stage: TerraformInitPlan
+  displayName: Terraform Init Plan
+  jobs:
+  - job: TerraformInitPlan
+    steps:
+    - task: tfsec@1
+      inputs:
+        version: 'v1.26.0'
+        dir: '$(System.DefaultWorkingDirectory)/env/dev/'
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+        backendServiceArm: 'infra-pipeline-azure'
+        backendAzureRmResourceGroupName: "MC_dev-rg1_aks-dev-cluster_eastus"
+        backendAzureRmStorageAccountName: 'devbkstg01'
+        backendAzureRmContainerName: 'dev'
+        backendAzureRmKey: 'dev.terraform.tfstate'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'destroy'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+        environmentServiceNameAzureRM: 'infra-pipeline-azure'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+        environmentServiceNameAzureRM: 'infra-pipeline-azure'
+- stage: ManualvalidationTerraformapply
+  dependsOn: TerraformInitPlan
+  jobs:
+  - job: manualvalidation
+    pool: server
+    displayName: Manual validation
+    steps:
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'adfs@afd'
+  - job: terraformapply
+    dependsOn: manualvalidation
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
+        backendServiceArm: 'infra-pipeline-azure'
+        backendAzureRmResourceGroupName: "MC_dev-rg1_aks-dev-cluster_eastus"
+        backendAzureRmStorageAccountName: 'devbkstg01'
+        backendAzureRmContainerName: 'dev'
+        backendAzureRmKey: 'dev.terraform.tfstate'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+        environmentServiceNameAzureRM: 'infra-pipeline-azure'
