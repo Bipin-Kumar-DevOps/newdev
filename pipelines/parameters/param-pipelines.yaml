@@ -18,7 +18,7 @@ variables:
   backendAzureRmResourceGroupName: 'dev-rg1'
   backendAzureRmStorageAccountName: 'devstgacbk01'
   backendAzureRmContainerName: 'devcont'
-  backendAzureRmKey: 'dev.terraform.tfstate' 
+  backendAzureRmKey: '${{ parameters.env }}.terraform.tfstate' 
 
   
 
