@@ -11,7 +11,6 @@ parameters:
   - dev
   - qa
 
-
 variables:
   workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.env }}'
   backendServiceArm: 'new-sc-bk'
