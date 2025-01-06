@@ -1,6 +1,14 @@
-Variables:
-  workingDirectory: '$(System.DefaultWorkingDirectory)/env/'
-  backendServiceArm: 
+parameters:
+- name: environment
+  
+
+variables:
+  workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+  backendServiceArm: 'new-sc-bk'
+  backendAzureRmResourceGroupName: 'dev-rg1'
+  backendAzureRmStorageAccountName: 'devstgacbk01'
+  backendAzureRmContainerName: 'devcont'
+  backendAzureRmKey: 'dev.terraform.tfstate' 
 
 stages:
 - stage: TerraformInitPlan
@@ -11,32 +19,23 @@ stages:
     - task: tfsec@1
       inputs:
         version: 'v1.26.0'
-        dir: '$(System.DefaultWorkingDirectory)/env/dev/'
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
+        dir: $(workingDirectory)
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        backendServiceArm: 'infra-pipeline-azure'
-        backendAzureRmResourceGroupName: "MC_dev-rg1_aks-dev-cluster_eastus"
-        backendAzureRmStorageAccountName: 'devbkstg01'
-        backendAzureRmContainerName: 'dev'
+        workingDirectory: $(workingDirectory)
+        backendServiceArm: $(backendServiceArm)
+        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
         backendAzureRmKey: 'dev.terraform.tfstate'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
-        command: 'destroy'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
-        environmentServiceNameAzureRM: 'infra-pipeline-azure'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
         command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        environmentServiceNameAzureRM: 'infra-pipeline-azure'
+        workingDirectory: $(workingDirectory)
+        environmentServiceNameAzureRM: 'new-sc-bk'
 - stage: ManualvalidationTerraformapply
   dependsOn: TerraformInitPlan
   jobs:
@@ -54,15 +53,15 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev/'
-        backendServiceArm: 'infra-pipeline-azure'
-        backendAzureRmResourceGroupName: "MC_dev-rg1_aks-dev-cluster_eastus"
-        backendAzureRmStorageAccountName: 'devbkstg01'
-        backendAzureRmContainerName: 'dev'
+        workingDirectory: $(workingDirectory)
+        backendServiceArm: 'new-sc-bk'
+        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
         backendAzureRmKey: 'dev.terraform.tfstate'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
-        environmentServiceNameAzureRM: 'infra-pipeline-azure'
+        workingDirectory: $(workingDirectory)
+        environmentServiceNameAzureRM: 'new-sc-bk'

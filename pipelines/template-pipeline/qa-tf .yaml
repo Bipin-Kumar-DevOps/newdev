@@ -1,6 +1,10 @@
 trigger: none
-  # branches:
-  #   include:
-  #   - main
 
 pool: bipinpool
+
+stages: 
+- stage: tfinitplan
+  jobs:
+  - job: tfinitplan
+    
+
