@@ -1,8 +1,31 @@
+# trigger: none
+
+# pool: bipinpool
+
+# stages:
+# - template: template-tf.yaml
+#   parameters:
+#     name: dev
+
 trigger: none
 
 pool: bipinpool
+
+variables:
+  workingDirectory: '$(System.DefaultWorkingDirectory)/env/dev'
+  backendServiceArm: 'new-sc-bk'
+  backendAzureRmResourceGroupName: 'dev-rg1'
+  backendAzureRmStorageAccountName: 'devstgacbk01'
+  backendAzureRmContainerName: 'devcont'
+  backendAzureRmKey: 'dev.terraform.tfstate'
 
 stages:
 - template: template-tf.yaml
   parameters:
     name: dev
+    workingDirectory: '$(workingDirectory)'
+    backendServiceArm: '$(backendServiceArm)'
+    backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+    backendAzureRmStorageAccountName: '$(backendAzureRmStorageAccountName)'
+    backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+    backendAzureRmKey: '$(backendAzureRmKey)'
