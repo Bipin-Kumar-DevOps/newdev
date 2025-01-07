@@ -36,4 +36,4 @@ pool: bipinpool
 stages:
 - template: template-tf.yaml
   parameters:
-    name: dev
+    environment: dev

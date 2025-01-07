@@ -1,20 +1,19 @@
-parameters: 
-- name: name
-  type: string
+parameters:
+  name: environment
+
+variables:
+  workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.environment }}'
+  backendServiceArm: 'new-sc-bk'
+  backendAzureRmResourceGroupName: 'dev-rg1'
+  backendAzureRmStorageAccountName: 'devstgacbk01'
+  backendAzureRmContainerName: 'devcont'
+  backendAzureRmKey: '${{ parameters.environment }}.terraform.tfstate' 
 
 stages:
 - stage: TerraformInitPlan
   displayName: Terraform Init Plan
-  variables:
-    workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name }}'
-    backendServiceArm: 'new-sc-bk'
-    backendAzureRmResourceGroupName: 'dev-rg1'
-    backendAzureRmStorageAccountName: 'devstgacbk01'
-    backendAzureRmContainerName: 'devcont'
-    backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
   jobs:
   - job: TerraformInitPlan
-    displayName: "Terraform Init and Plan"
     steps:
     - task: tfsec@1
       inputs:
@@ -26,37 +25,27 @@ stages:
         command: 'init'
         workingDirectory: $(workingDirectory)
         backendServiceArm: $(backendServiceArm)
-        backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
-        backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
-        backendAzureRmContainerName: $(backendAzureRmContainerName)
+        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
         backendAzureRmKey: $(backendAzureRmKey)
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: $(workingDirectory)
-        environmentServiceNameAzureRM: $(backendServiceArm)
-
-- stage: ManualValidationTerraformApply
-  displayName: "Manual Validation and Terraform Apply"
+        environmentServiceNameAzureRM: 'new-sc-bk'
+- stage: ManualvalidationTerraformapply
   dependsOn: TerraformInitPlan
-  variables:
-    workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name }}'
-    backendServiceArm: 'new-sc-bk'
-    backendAzureRmResourceGroupName: 'dev-rg1'
-    backendAzureRmStorageAccountName: 'devstgacbk01'
-    backendAzureRmContainerName: 'devcont'
-    backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
   jobs:
   - job: manualvalidation
     pool: server
-    displayName: Manual Validation
+    displayName: Manual validation
     steps:
     - task: ManualValidation@1
       inputs:
-        notifyUsers: 'valid-email@example.com'
+        notifyUsers: 'adfs@afd'
   - job: terraformapply
-    displayName: "Terraform Apply"
     dependsOn: manualvalidation
     steps:
     - task: TerraformTaskV4@4
@@ -64,14 +53,14 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: $(workingDirectory)
-        backendServiceArm: $(backendServiceArm)
-        backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
-        backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
-        backendAzureRmContainerName: $(backendAzureRmContainerName)
+        backendServiceArm: 'new-sc-bk'
+        backendAzureRmResourceGroupName: 'dev-rg1'
+        backendAzureRmStorageAccountName: 'devstgacbk01'
+        backendAzureRmContainerName: 'devcont'
         backendAzureRmKey: $(backendAzureRmKey)
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: $(workingDirectory)
-        environmentServiceNameAzureRM: $(backendServiceArm)
+        environmentServiceNameAzureRM: 'new-sc-bk'
