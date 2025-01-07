@@ -2,17 +2,16 @@ parameters:
 - name: name
   type: string
 
-variables:
-  workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name }}'
-  backendServiceArm: 'new-sc-bk'
-  backendAzureRmResourceGroupName: 'dev-rg1'
-  backendAzureRmStorageAccountName: 'devstgacbk01'
-  backendAzureRmContainerName: 'devcont'
-  backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
-
 stages:
 - stage: TerraformInitPlan
   displayName: Terraform Init Plan
+  variables:
+    workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name }}'
+    backendServiceArm: 'new-sc-bk'
+    backendAzureRmResourceGroupName: 'dev-rg1'
+    backendAzureRmStorageAccountName: 'devstgacbk01'
+    backendAzureRmContainerName: 'devcont'
+    backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
   jobs:
   - job: TerraformInitPlan
     displayName: "Terraform Init and Plan"
@@ -41,6 +40,13 @@ stages:
 - stage: ManualValidationTerraformApply
   displayName: "Manual Validation and Terraform Apply"
   dependsOn: TerraformInitPlan
+  variables:
+    workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name }}'
+    backendServiceArm: 'new-sc-bk'
+    backendAzureRmResourceGroupName: 'dev-rg1'
+    backendAzureRmStorageAccountName: 'devstgacbk01'
+    backendAzureRmContainerName: 'devcont'
+    backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
   jobs:
   - job: manualvalidation
     displayName: Manual Validation
