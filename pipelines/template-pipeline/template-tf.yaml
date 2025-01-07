@@ -1,19 +1,21 @@
-parameters:
+parameters: 
 - name: name
+  type: string
 
-# variables:
-#   workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name }}'
-#   backendServiceArm: 'new-sc-bk'
-#   backendAzureRmResourceGroupName: 'dev-rg1'
-#   backendAzureRmStorageAccountName: 'devstgacbk01'
-#   backendAzureRmContainerName: 'devcont'
-#   backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
+variables:
+  workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name }}'
+  backendServiceArm: 'new-sc-bk'
+  backendAzureRmResourceGroupName: 'dev-rg1'
+  backendAzureRmStorageAccountName: 'devstgacbk01'
+  backendAzureRmContainerName: 'devcont'
+  backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
 
 stages:
 - stage: TerraformInitPlan
   displayName: Terraform Init Plan
   jobs:
   - job: TerraformInitPlan
+    displayName: "Terraform Init and Plan"
     steps:
     - task: tfsec@1
       inputs:
@@ -36,17 +38,18 @@ stages:
         workingDirectory: $(workingDirectory)
         environmentServiceNameAzureRM: $(backendServiceArm)
 
-- stage: ManualvalidationTerraformapply
+- stage: ManualValidationTerraformApply
+  displayName: "Manual Validation and Terraform Apply"
   dependsOn: TerraformInitPlan
   jobs:
   - job: manualvalidation
-    pool: server
     displayName: Manual Validation
     steps:
     - task: ManualValidation@1
       inputs:
         notifyUsers: 'valid-email@example.com'
   - job: terraformapply
+    displayName: "Terraform Apply"
     dependsOn: manualvalidation
     steps:
     - task: TerraformTaskV4@4
