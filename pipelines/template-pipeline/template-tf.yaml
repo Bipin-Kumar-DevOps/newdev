@@ -49,6 +49,7 @@ stages:
     backendAzureRmKey: '${{ parameters.name }}.terraform.tfstate'
   jobs:
   - job: manualvalidation
+    pool: server
     displayName: Manual Validation
     steps:
     - task: ManualValidation@1
