@@ -3,10 +3,6 @@ trigger: none
 pool: bipinpool
 
 stages:
-- stage: terreforminitplanapply
-  # jobs:
-  # - job: terraforminitplanapplyJob
-  #   steps:
 - template: template-tf.yaml
 
 parameters:
