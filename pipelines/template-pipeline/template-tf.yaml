@@ -1,14 +1,14 @@
 parameters:
-- name: environment
+- name: name
   
 
 variables:
-  workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.environment }}'
+  workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.name}}'
   backendServiceArm: 'new-sc-bk'
   backendAzureRmResourceGroupName: 'dev-rg1'
   backendAzureRmStorageAccountName: 'devstgacbk01'
   backendAzureRmContainerName: 'devcont'
-  backendAzureRmKey: 'dev.terraform.tfstate' 
+  backendAzureRmKey: '${{ parameters.name}}.terraform.tfstate' 
 
 stages:
 - stage: TerraformInitPlan
@@ -29,7 +29,7 @@ stages:
         backendAzureRmResourceGroupName: 'dev-rg1'
         backendAzureRmStorageAccountName: 'devstgacbk01'
         backendAzureRmContainerName: 'devcont'
-        backendAzureRmKey: '${{ parameters.environment }.terraform.tfstate'
+        backendAzureRmKey: '${backendAzureRmKey}'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
@@ -58,7 +58,7 @@ stages:
         backendAzureRmResourceGroupName: 'dev-rg1'
         backendAzureRmStorageAccountName: 'devstgacbk01'
         backendAzureRmContainerName: 'devcont'
-        backendAzureRmKey: '${{ parameters.environment }.terraform.tfstate'
+        backendAzureRmKey: '${backendAzureRmKey}'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
