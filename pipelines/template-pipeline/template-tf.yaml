@@ -1,5 +1,5 @@
 parameters:
-  name: environment
+- name: environment
 
 variables:
   workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.environment }}'
