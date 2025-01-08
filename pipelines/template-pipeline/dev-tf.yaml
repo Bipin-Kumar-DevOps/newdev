@@ -45,5 +45,5 @@ stages:
 - template: template-tf.yaml
   parameters:
     environment: dev
-parameters:
-- name: environment
+# parameters:
+# - name: environment
