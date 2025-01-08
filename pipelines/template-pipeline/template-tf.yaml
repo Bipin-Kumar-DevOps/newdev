@@ -1,6 +1,7 @@
 parameters:
 - name: environment
   type: string
+  default: qa
   values:
   - dev
   - qa
