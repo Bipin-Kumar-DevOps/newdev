@@ -1,11 +1,6 @@
 parameters:
 - name: environment
-  type: string
-  default: qa
-  values:
-  - dev
-  - qa
-  - prod
+
 variables:
   workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.environment }}'
   backendServiceArm: 'new-sc-bk'
