@@ -1,14 +1,6 @@
 parameters:
 - name: environment
 
-variables:
-  workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.environment }}'
-  backendServiceArm: 'new-sc-bk'
-  backendAzureRmResourceGroupName: 'dev-rg1'
-  backendAzureRmStorageAccountName: 'devstgacbk01'
-  backendAzureRmContainerName: 'devcont'
-  backendAzureRmKey: '${{ parameters.environment }}.terraform.tfstate' 
-
 stages:
 - stage: TerraformInitPlan
   displayName: Terraform Init Plan
