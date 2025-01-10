@@ -33,6 +33,9 @@ trigger: none
 
 pool: bipinpool
 
+parameters:
+- name: environment
+
 variables:
   workingDirectory: '$(System.DefaultWorkingDirectory)/env/${{ parameters.environment }}'
   backendServiceArm: 'new-sc-bk'
@@ -45,5 +48,3 @@ stages:
 - template: template-tf.yaml
   parameters:
     environment: dev
-parameters:
-- name: environment
